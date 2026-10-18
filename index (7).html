@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blockverse</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: #222;
+      background: #f4f4f5;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      height: 64px;
+      padding: 0 25px;
+      color: white;
+      background: #191a1c;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    nav {
+      display: flex;
+      gap: 22px;
+    }
+
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: white;
+    }
+
+    .search {
+      width: 180px;
+      margin-left: auto;
+      padding: 10px;
+      border: 1px solid #444;
+      border-radius: 7px;
+      color: white;
+      background: #303236;
+    }
+
+    button {
+      border: 0;
+      border-radius: 7px;
+      padding: 11px 16px;
+      color: white;
+      background: #e2231a;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #b91b14;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: calc(100vh - 64px);
+    }
+
+    aside {
+      padding: 25px 15px;
+      color: white;
+      background: #242629;
+    }
+
+    aside h4 {
+      margin: 0 12px 15px;
+      color: #999;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    aside a {
+      display: block;
+      padding: 13px;
+      border-radius: 7px;
+      color: #ccc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    aside a:hover,
+    aside a.active {
+      color: white;
+      background: #383a3e;
+    }
+
+    main {
+      max-width: 1100px;
+      width: 100%;
+      margin: auto;
+      padding: 40px;
+    }
+
+    .label {
+      color: #e2231a;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    h1 {
+      margin: 10px 0;
+      font-size: 52px;
+    }
+
+    .description {
+      max-width: 600px;
+      color: #777;
+      line-height: 1.6;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin: 25px 0 35px;
+    }
+
+    .refresh {
+      color: #333;
+      background: white;
+      border: 1px solid #ddd;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .title-row h2 {
+      font-size: 22px;
+    }
+
+    #gameCount {
+      color: #888;
+    }
+
+    #gameList {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .game-card {
+      overflow: hidden;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      background: white;
+      box-shadow: 0 3px 12px #00000012;
+    }
+
+    .game-image {
+      display: grid;
+      height: 125px;
+      place-items: center;
+      color: white;
+      background: linear-gradient(135deg, #e2231a, #74100b);
+      font-size: 40px;
+    }
+
+    .game-info {
+      padding: 15px;
+    }
+
+    .game-info h3 {
+      margin: 0 0 8px;
+    }
+
+    .game-info p {
+      height: 35px;
+      overflow: hidden;
+      color: #777;
+      font-size: 13px;
+    }
+
+    .game-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 15px;
+      color: #777;
+      font-size: 12px;
+    }
+
+    .play {
+      padding: 8px 12px;
+      color: white;
+      background: #191a1c;
+      font-size: 12px;
+    }
+
+    .empty {
+      grid-column: 1 / -1;
+      padding: 80px 20px;
+      border: 2px dashed #ccc;
+      border-radius: 14px;
+      color: #888;
+      background: white;
+      text-align: center;
+    }
+
+    .empty h2 {
+      color: #333;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: #0009;
+    }
+
+    .modal.show {
+      display: grid;
+    }
+
+    .modal-box {
+      position: relative;
+      width: min(100%, 500px);
+      padding: 30px;
+      border-radius: 14px;
+      background: white;
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      color: #777;
+      background: transparent;
+      font-size: 28px;
+    }
+
+    .modal-box h2 {
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: bold;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      margin-top: 7px;
+      padding: 11px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .visibility {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      margin: 20px 0;
+      font-size: 13px;
+    }
+
+    .visibility label {
+      margin: 0;
+      font-weight: normal;
+    }
+
+    #status {
+      min-height: 20px;
+      color: #e2231a;
+      font-size: 13px;
+    }
+
+    .auth-note {
+      min-height: 20px;
+      color: #e2231a;
+      font-size: 13px;
+    }
+
+    .player {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      background: #111;
+    }
+
+    .player.show {
+      display: block;
+    }
+
+    .player iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #111;
+    }
+
+    .close-player {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      z-index: 21;
+      padding: 10px 15px;
+      color: white;
+      background: #e2231a;
+    }
+
+    @media (max-width: 700px) {
+      header {
+        gap: 12px;
+        padding: 0 12px;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .search {
+        width: 120px;
+      }
+
+      .layout {
+        grid-template-columns: 70px 1fr;
+      }
+
+      aside {
+        padding: 25px 8px;
+      }
+
+      aside h4 {
+        display: none;
+      }
+
+      aside a {
+        padding: 14px 5px;
+        text-align: center;
+        font-size: 0;
+      }
+
+      main {
+        padding: 25px 15px;
+      }
+
+      h1 {
+        font-size: 38px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">
+      ◆ BLOCKVERSE
+    </div>
+
+    <nav>
+      <a href="#">Discover</a>
+      <a href="#">Marketplace</a>
+      <a href="#">Create</a>
+    </nav>
+
+    <input
+      class="search"
+      type="search"
+      placeholder="Search"
+    >
+
+    <button id="loginButton">
+      Log In
+    </button>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <h4>Menu</h4>
+
+      <a class="active" href="#">
+        ⌂ Home
+      </a>
+
+      <a id="publicGamesLink" href="#games">
+        ◇ Discover
+      </a>
+
+      <a id="myGamesLink" href="#games">
+        ▣ My Games
+      </a>
+
+      <a href="#">
+        ● Avatar
+      </a>
+
+      <a href="#">
+        ▣ Inventory
+      </a>
+
+      <a href="#">
+        ⚙ Settings
+      </a>
+    </aside>
+
+    <main>
+
+      <div class="label">
+        YOUR BLOCK WORLD
+      </div>
+
+      <h1>
+        Welcome to Blockverse
+      </h1>
+
+      <p class="description">
+        Satu tempat untuk menyimpan dan memainkan game HTML buatanmu sendiri.
+      </p>
+
+      <div class="actions">
+
+        <button id="openUpload">
+          ＋ Tambah Game
+        </button>
+
+        <button
+          class="refresh"
+          id="refreshGames"
+        >
+          Refresh Game
+        </button>
+
+      </div>
+
+      <div class="title-row" id="games">
+
+        <h2 id="gameTitle">
+          Game Public
+        </h2>
+
+        <span id="gameCount">
+          Memuat...
+        </span>
+
+      </div>
+
+      <div id="gameList">
+
+        <div class="empty">
+          <h2>
+            Belum ada game
+          </h2>
+
+          <p>
+            Klik tombol Tambah Game untuk memasukkan game HTML.
+          </p>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <div class="modal" id="uploadModal">
+
+    <div class="modal-box">
+
+      <button
+        class="close"
+        id="closeUpload"
+      >
+        ×
+      </button>
+
+      <h2>
+        Tambah Game Baru
+      </h2>
+
+      <p>
+        Upload file HTML game kamu ke Blockverse.
+      </p>
+
+      <form id="uploadForm">
+
+        <label>
+          Nama Game
+
+          <input
+            id="gameName"
+            type="text"
+            placeholder="Contoh: Block Runner 3D"
+            required
+          >
+        </label>
+
+        <label>
+          Deskripsi
+
+          <textarea
+            id="gameDescription"
+            placeholder="Deskripsi game"
+          ></textarea>
+        </label>
+
+        <label>
+          File HTML
+
+          <input
+            id="gameFile"
+            type="file"
+            accept=".html,text/html"
+            required
+          >
+        </label>
+
+        <div class="visibility">
+
+          <b>
+            Visibilitas:
+          </b>
+
+          <label>
+            <input
+              type="radio"
+              name="visibility"
+              value="public"
+              checked
+            >
+            Public
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="visibility"
+              value="private"
+            >
+            Private
+          </label>
+
+        </div>
+
+        <button type="submit">
+          Publish Game
+        </button>
+
+        <p id="uploadStatus"></p>
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <div class="modal" id="authModal">
+
+    <div class="modal-box">
+
+      <button class="close" id="closeAuth">
+        ×
+      </button>
+
+      <h2 id="authTitle">
+        Log In
+      </h2>
+
+      <p id="authDescription">
+        Masuk untuk menyimpan game dan profil kamu.
+      </p>
+
+      <form id="authForm">
+
+        <label>
+          Email
+          <input id="authEmail" type="email" required placeholder="email kamu">
+        </label>
+
+        <label>
+          Password
+          <input id="authPassword" type="password" minlength="6" required placeholder="minimal 6 karakter">
+        </label>
+
+        <button id="authSubmit" type="submit">
+          Log In
+        </button>
+
+        <button id="switchAuth" type="button" style="margin-left: 8px; color: #333; background: #eee;">
+          Buat akun
+        </button>
+
+        <p class="auth-note" id="authStatus"></p>
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <div class="player" id="player">
+
+    <button
+      class="close-player"
+      id="closePlayer"
+    >
+      ← Kembali
+    </button>
+
+    <iframe
+      id="gameFrame"
+      sandbox="allow-scripts allow-forms allow-pointer-lock allow-modals"
+    ></iframe>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const SUPABASE_URL =
+      "https://kihoknkeojkmuqcbfgup.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_EcH-xyB4d6PmUDddPHPQCA_uLHznAIR";
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+    const uploadModal =
+      document.getElementById("uploadModal");
+
+    const player =
+      document.getElementById("player");
+
+    const gameFrame =
+      document.getElementById("gameFrame");
+
+    const uploadStatus =
+      document.getElementById("uploadStatus");
+
+    const authModal =
+      document.getElementById("authModal");
+
+    let signUpMode = false;
+
+    document
+      .getElementById("loginButton")
+      .onclick = function () {
+        authModal.classList.add("show");
+      };
+
+    document
+      .getElementById("closeAuth")
+      .onclick = function () {
+        authModal.classList.remove("show");
+      };
+
+    document
+      .getElementById("switchAuth")
+      .onclick = function () {
+        signUpMode = !signUpMode;
+        document.getElementById("authTitle").textContent = signUpMode ? "Sign Up" : "Log In";
+        document.getElementById("authDescription").textContent = signUpMode ? "Buat akun Blockverse kamu." : "Masuk untuk menyimpan game dan profil kamu.";
+        document.getElementById("authSubmit").textContent = signUpMode ? "Sign Up" : "Log In";
+        document.getElementById("switchAuth").textContent = signUpMode ? "Sudah punya akun" : "Buat akun";
+        document.getElementById("authStatus").textContent = "";
+      };
+
+    document
+      .getElementById("authForm")
+      .onsubmit = async function (event) {
+        event.preventDefault();
+        const email = document.getElementById("authEmail").value;
+        const password = document.getElementById("authPassword").value;
+        const message = document.getElementById("authStatus");
+        message.textContent = signUpMode ? "Membuat akun..." : "Memeriksa akun...";
+        const result = signUpMode
+          ? await supabaseClient.auth.signUp({ email, password })
+          : await supabaseClient.auth.signInWithPassword({ email, password });
+        if (result.error) {
+          message.textContent = result.error.message;
+          return;
+        }
+        message.textContent = signUpMode ? "Akun dibuat. Cek email jika diminta." : "Berhasil masuk!";
+        document.getElementById("loginButton").textContent = email.split("@")[0];
+        setTimeout(() => authModal.classList.remove("show"), 900);
+      };
+
+    document
+      .getElementById("openUpload")
+      .onclick = function () {
+        uploadModal.classList.add("show");
+      };
+
+    document
+      .getElementById("closeUpload")
+      .onclick = function () {
+        uploadModal.classList.remove("show");
+      };
+
+    document
+      .getElementById("closePlayer")
+      .onclick = function () {
+        player.classList.remove("show");
+        gameFrame.srcdoc = "";
+      };
+
+    function cleanText(text) {
+      return String(text).replace(
+        /[&<>"']/g,
+        function (character) {
+          return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            "\"": "&quot;",
+            "'": "&#039;"
+          }[character];
+        }
+      );
+    }
+
+    async function playGame(gameUrl) {
+      try {
+        const response = await fetch(gameUrl);
+
+        if (!response.ok) {
+          throw new Error("Game tidak bisa dibuka.");
+        }
+
+        const html = await response.text();
+        gameFrame.srcdoc = html;
+        player.classList.add("show");
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+
+    async function loadGames(mode = "public") {
+      const gameList =
+        document.getElementById("gameList");
+
+      const sessionResult = await supabaseClient.auth.getSession();
+      const user = sessionResult.data.session?.user;
+      let query = supabaseClient
+        .from("games")
+        .select("id,name,description,game_url,visibility,created_at,owner_id")
+        .order("created_at", { ascending: false });
+
+      if (mode === "mine") {
+        document.getElementById("gameTitle").textContent = "My Games";
+        if (!user) {
+          gameList.innerHTML = '<div class="empty"><h2>Login dulu</h2><p>Masuk ke akunmu untuk melihat game milikmu.</p></div>';
+          document.getElementById("gameCount").textContent = "Login diperlukan";
+          return;
+        }
+        query = query.eq("owner_id", user.id);
+      } else {
+        document.getElementById("gameTitle").textContent = "Game Public";
+        query = query.eq("visibility", "public");
+      }
+
+      const result = await query;
+
+      if (result.error) {
+        gameList.innerHTML = `
+          <div class="empty">
+            <h2>Database belum tersambung</h2>
+            <p>Pastikan SQL Supabase sudah berhasil dijalankan.</p>
+          </div>
+        `;
+
+        document
+          .getElementById("gameCount")
+          .textContent = "Error";
+
+        return;
+      }
+
+      document
+        .getElementById("gameCount")
+        .textContent =
+        result.data.length + " game";
+
+      if (result.data.length === 0) {
+        gameList.innerHTML = `
+          <div class="empty">
+            <h2>Belum ada game</h2>
+            <p>Klik tombol Tambah Game untuk mulai.</p>
+          </div>
+        `;
+
+        return;
+      }
+
+      gameList.innerHTML = result.data
+        .map(function (game) {
+          return `
+            <article class="game-card">
+
+              <div class="game-image">
+                ◆
+              </div>
+
+              <div class="game-info">
+
+                <h3>
+                  ${cleanText(game.name)}
+                </h3>
+
+                <p>
+                  ${cleanText(
+                    game.description ||
+                    "Game HTML Blockverse"
+                  )}
+                </p>
+
+                <div class="game-bottom">
+
+                  <span>
+                    ${game.visibility === "private" ? "🔒 Private" : "🌍 Public"}
+                  </span>
+
+                  <button
+                    class="play"
+                    onclick="playGame('${game.game_url}')"
+                  >
+                    Mainkan
+                  </button>
+
+                </div>
+
+              </div>
+
+            </article>
+          `;
+        })
+        .join("");
+    }
+
+    document
+      .getElementById("refreshGames")
+      .onclick = () => loadGames("public");
+
+    document
+      .getElementById("publicGamesLink")
+      .onclick = event => {
+        event.preventDefault();
+        loadGames("public");
+      };
+
+    document
+      .getElementById("myGamesLink")
+      .onclick = event => {
+        event.preventDefault();
+        loadGames("mine");
+      };
+
+    document
+      .getElementById("uploadForm")
+      .onsubmit = async function (event) {
+        event.preventDefault();
+
+        const session = await supabaseClient.auth.getSession();
+        const user = session.data.session?.user;
+        if (!user) {
+          uploadStatus.textContent = "Login dulu sebelum upload game.";
+          uploadModal.classList.remove("show");
+          document.getElementById("authModal").classList.add("show");
+          return;
+        }
+
+        const file =
+          document.getElementById("gameFile")
+            .files[0];
+
+        const name =
+          document.getElementById("gameName")
+            .value
+            .trim();
+
+        const description =
+          document.getElementById("gameDescription")
+            .value
+            .trim();
+
+        const visibility =
+          document.querySelector(
+            'input[name="visibility"]:checked'
+          ).value;
+
+        if (
+          !file ||
+          !file.name
+            .toLowerCase()
+            .endsWith(".html")
+        ) {
+          uploadStatus.textContent =
+            "Pilih file dengan format .html";
+
+          return;
+        }
+
+        uploadStatus.textContent =
+          "Mengupload game...";
+
+        const safeName =
+          file.name
+            .toLowerCase()
+            .replace(
+              /[^a-z0-9.-]/g,
+              "-"
+            );
+
+        const filePath =
+          Date.now() + "-" + safeName;
+
+        const upload =
+          await supabaseClient
+            .storage
+            .from("games")
+            .upload(
+              filePath,
+              file,
+              {
+                contentType: "text/html",
+                upsert: false
+              }
+            );
+
+        if (upload.error) {
+          uploadStatus.textContent =
+            "Upload gagal: " +
+            upload.error.message;
+
+          return;
+        }
+
+        const publicUrl =
+          supabaseClient
+            .storage
+            .from("games")
+            .getPublicUrl(filePath)
+            .data
+            .publicUrl;
+
+        const savedGame =
+          await supabaseClient
+            .from("games")
+            .insert({
+              name: name,
+              description: description,
+              file_path: filePath,
+              game_url: publicUrl,
+              visibility: visibility,
+              owner_id: user.id
+            });
+
+        if (savedGame.error) {
+          uploadStatus.textContent =
+            "File masuk, tetapi data gagal disimpan: " +
+            savedGame.error.message;
+
+          return;
+        }
+
+        uploadStatus.textContent =
+          "Game berhasil ditambahkan!";
+
+        document
+          .getElementById("uploadForm")
+          .reset();
+
+        await loadGames();
+
+        setTimeout(function () {
+          uploadModal.classList.remove("show");
+          uploadStatus.textContent = "";
+        }, 1000);
+      };
+
+    loadGames();
+  </script>
+
+</body>
+
+</html>
