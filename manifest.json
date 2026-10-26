@@ -1,0 +1,19 @@
+{
+  "name": "Blockverse",
+  "short_name": "Blockverse",
+  "description": "Game hub untuk memainkan dan membagikan game HTML.",
+  "start_url": "/blockverse/",
+  "scope": "/blockverse/",
+  "display": "standalone",
+  "background_color": "#191a1c",
+  "theme_color": "#191a1c",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
